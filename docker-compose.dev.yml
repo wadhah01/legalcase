@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://api-dev.yourdomain.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-dev.rule=Host(`app-dev.yourdomain.com`)"
+
+  backend:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/legal_case_management_dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-dev.rule=Host(`api-dev.yourdomain.com`)"
+
+  db:
+    environment:
+      - POSTGRES_DB=legal_case_management_dev

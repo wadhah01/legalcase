@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://api.yourdomain.com
+    deploy:
+      replicas: 2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`app.yourdomain.com`)"
+      - "traefik.http.routers.frontend.tls=true"
+
+  backend:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/legal_case_management_prod
+    deploy:
+      replicas: 2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.yourdomain.com`)"
+      - "traefik.http.routers.backend.tls=true"
+
+  db:
+    environment:
+      - POSTGRES_DB=legal_case_management_prod
